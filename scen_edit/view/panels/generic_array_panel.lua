@@ -1,11 +1,8 @@
-local C_HEIGHT = 16
-local B_HEIGHT = 26
-
 GenericArrayPanel = LCS.class{}
 
 function GenericArrayPanel:init(parent, type)
-	self.parent = parent
-	self.type = type
+    self.parent = parent
+    self.type = type
     self.atomicType = type:gsub("_array", "")
     self.elements = {}
     self.subPanels = {}
@@ -22,21 +19,21 @@ function GenericArrayPanel:AddElement()
 --        width='40%',
 --        x = 1,
 --        bottom = 1,
-        height = B_HEIGHT,
+        height = SCEN_EDIT.conf.B_HEIGHT,
         OnClick={
             function() 
                 mode = 'add'
                 Spring.Echo(screen0.classname)
                 Spring.Echo(self.parent.parent.parent.classname)
-				local newActionWindow = CustomWindow:New {
-					parent = screen0,
-					mode = mode,
-					dataType = self.atomicType,
-					parentWindow = self.parent.parent.parent,
-					parentObj = {},--btnExpressions.data,
---					condition = btnExpressions.data[1], --nil if mode ~= 'edit'
---					cbExpressions = cbExpressions,
-				}
+                local newActionWindow = CustomWindow:New {
+                    parent = screen0,
+                    mode = mode,
+                    dataType = self.atomicType,
+                    parentWindow = self.parent.parent.parent,
+                    parentObj = {},--btnExpressions.data,
+--                    condition = btnExpressions.data[1], --nil if mode ~= 'edit'
+--                    cbExpressions = cbExpressions,
+                }
             end
         }
     })
@@ -44,7 +41,7 @@ end
 
 function GenericArrayPanel:Initialize()
     Spring.Echo(self.atomicType)
-	local radioGroup = {}
+    local radioGroup = {}
 --    self.subPanels =  MakeComponentPanel(self.parent)--[[
     self.subPanels = StackPanel:New {
         itemMargin = {0, 0, 0, 0},
@@ -62,26 +59,26 @@ function GenericArrayPanel:Initialize()
         width='40%',
         x = 1,
         bottom = 1,
-        height = B_HEIGHT,
+        height = SCEN_EDIT.conf.B_HEIGHT,
         parent = addPanel,
         OnClick={function() self:AddElement() end}
     }
-	
-	--VARIABLE
+    
+    --VARIABLE
     self.cbVariable, self.cmbVariable = MakeVariableChoice(self.type, self.parent)
     if self.cbVariable then
-		table.insert(radioGroup, self.cbVariable)
+        table.insert(radioGroup, self.cbVariable)
     end
-	
-	self.cbExpression, self.btnExpression = SCEN_EDIT.AddExpression(self.type, self.parent)
-	if self.cbExpression then
-		table.insert(radioGroup, self.cbExpression)
-	end
-	MakeRadioButtonGroup(radioGroup)
+    
+    self.cbExpression, self.btnExpression = SCEN_EDIT.AddExpression(self.type, self.parent)
+    if self.cbExpression then
+        table.insert(radioGroup, self.cbExpression)
+    end
+    SCEN_EDIT.MakeRadioButtonGroup(radioGroup)
 end
 
 function GenericArrayPanel:UpdateModel(field)
-	if self.cbVariable and self.cbVariable.checked then
+    if self.cbVariable and self.cbVariable.checked then
         field.type = "var"
         field.id = self.cmbVariable.variableIds[self.cmbVariable.selected]
     elseif self.cbExpression and self.cbExpression.checked then

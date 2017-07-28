@@ -18,37 +18,38 @@ local function ExtractFileName(filepath)
   end
 end
 
-function FileDialog:init(dir)
+function FileDialog:init(dir, caption)
     self.dir = dir or nil
-	self.confirmDialogCallback = nil
-	local buttonPanel = MakeComponentPanel()
-	self.fileEditBox = EditBox:New {
-		width = "40%",
-		x = "30%",
-		y = 1,
-		height = "100%",
-	}
-	
-	local okButton = Button:New {
-		height = SCEN_EDIT.model.B_HEIGHT,
-		bottom = 5,
-		width = "20%",
-		x = "10",
-		caption = "OK",
-	}
-	
-	local cancelButton = Button:New {
-		height = SCEN_EDIT.model.B_HEIGHT,
-		bottom = 5,
-		width = "20%",
-		x = "22%",
-		caption = "Cancel",
-	}
+	self.caption = caption or "File dialog"
+    self.confirmDialogCallback = nil
+    local buttonPanel = MakeComponentPanel()
+    self.fileEditBox = EditBox:New {
+        y = 1,
+		x = 75,
+		right = 0,
+        height = "100%",
+    }
+    
+    local okButton = Button:New {
+        height = SCEN_EDIT.conf.B_HEIGHT,
+        bottom = 5,
+        width = "20%",
+        right = "22%",
+        caption = "OK",
+    }
+    
+    local cancelButton = Button:New {
+        height = SCEN_EDIT.conf.B_HEIGHT,
+        bottom = 5,
+        width = "20%",
+		right = 10,
+        caption = "Cancel",
+    }
     self.filePanel = FilePanel:New {
         x = 10,
         y = 10,
         width = "100%",
-        height = "100%",	        
+        height = "100%",            
         dir = self.dir,
         multiselect = false,
     }
@@ -60,72 +61,72 @@ function FileDialog:init(dir)
                 self.fileEditBox:SetText(fileName)
             end
         end
-    }				
-	
+    }                
+    
     self.window = Window:New {
         x = 500,
         y = 200,
         width = 600,
         height = 600,
         parent = screen0,
-        caption = "File dialog",
+        caption = self.caption,
         children = {
             ScrollPanel:New {
                 width = "100%",
                 y = 10,
-				bottom = 80,
+                bottom = 80,
                 children = {
                     self.filePanel,
                 },
-			},
-			StackPanel:New {
-				x = 1,
-				width = "100%",
-				height = SCEN_EDIT.model.B_HEIGHT,
-				bottom = SCEN_EDIT.model.B_HEIGHT + 5 + 5,
-				padding = {0, 0, 0, 0},
-				itemMarging = {0, 0, 0, 0},
-				resizeItems = false,
-				orientation = "horizontal",
-				children = {				
-					Label:New {
-						width = "5%",
+            },
+            Control:New {
+                x = 1,
+                width = "100%",
+                height = SCEN_EDIT.conf.B_HEIGHT,
+                bottom = SCEN_EDIT.conf.B_HEIGHT + 20,
+                padding = {0, 0, 0, 0},
+                children = {                
+                    Label:New {
 						x = 1,
-						caption = "File name: ",
-					},				
-					self.fileEditBox,
-				},
-			},
-			okButton,
-			cancelButton,			
+						y = 4,
+						valign = "center",						
+                        width = 65,
+                        caption = "File name: ",
+						align = "left",
+                    },                
+                    self.fileEditBox,
+                },
+            },
+            okButton,
+            cancelButton,            
         },
     }
-	okButton.OnClick = {
-		function()
-			self:confirmDialog()
-			self.window:Dispose()
-		end
-	}
-	cancelButton.OnClick = {
-		function()
-			self.window:Dispose()
-		end
-	}
+    okButton.OnClick = {
+        function()
+            self:confirmDialog()
+            self.window:Dispose()
+        end
+    }
+    cancelButton.OnClick = {
+        function()
+            self.window:Dispose()
+        end
+    }
 --    self:SetDir(self.dir)
 end
 
 function FileDialog:setConfirmDialogCallback(func)
-	self.confirmDialogCallback = func
+    self.confirmDialogCallback = func
 end
 
 function FileDialog:getSelectedFilePath()
-	local path = self.filePanel.dir .. self.fileEditBox.text
-	return path
+    local path = self.filePanel.dir .. self.fileEditBox.text
+    return path
 end
 
 function FileDialog:confirmDialog()
-	local path = self:getSelectedFilePath()
-	if self.confirmDialogCallback then
-		self.confirmDialogCallback(path)
-	end
+    local path = self:getSelectedFilePath()
+    if self.confirmDialogCallback then
+        self.confirmDialogCallback(path)
+    end
 end

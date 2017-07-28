@@ -1,5 +1,6 @@
 SCEN_EDIT_VIEW_DIR = SCEN_EDIT_DIR .. "view/"
 SCEN_EDIT_VIEW_PANELS_DIR = SCEN_EDIT_VIEW_DIR .. "panels/"
+SCEN_EDIT_VIEW_MAIN_WINDOW_DIR = SCEN_EDIT_VIEW_DIR .. "main_window/"
 
 View = LCS.class{}
 
@@ -7,6 +8,8 @@ function View:init()
     SCEN_EDIT.Include(SCEN_EDIT_VIEW_DIR .. "view_area_manager_listener.lua")
     SCEN_EDIT.IncludeDir(SCEN_EDIT_VIEW_DIR)
     SCEN_EDIT.IncludeDir(SCEN_EDIT_VIEW_PANELS_DIR)
+	SCEN_EDIT.Include(SCEN_EDIT_VIEW_MAIN_WINDOW_DIR .. "abstract_main_window_panel.lua")
+	SCEN_EDIT.IncludeDir(SCEN_EDIT_VIEW_MAIN_WINDOW_DIR)	
     SCEN_EDIT.clipboard = Clipboard()
     self.areaViews = {}
     if devMode then
@@ -15,6 +18,8 @@ function View:init()
     self.selectionManager = SelectionManager()
     self.displayDevelop = true
     self.textureManager = TextureManager()
+    --self.mainWindow = MainWindow()
+	self.tabbedWindow = TabbedWindow()
 end
 
 function View:drawRect(x1, z1, x2, z2)

@@ -1,5 +1,3 @@
-local model = SCEN_EDIT.model
-
 UnitPanel = {
 }
 
@@ -12,7 +10,7 @@ function UnitPanel:New(obj)
 end
 
 function UnitPanel:Initialize()
-	local radioGroup = {}
+    local radioGroup = {}
     --PREDEFINED
     local stackUnitPanel = MakeComponentPanel(self.parent)
     self.cbPredefinedUnit = Checkbox:New {
@@ -22,18 +20,18 @@ function UnitPanel:Initialize()
         checked = false,
         parent = stackUnitPanel,
     }
-	table.insert(radioGroup, self.cbPredefinedUnit)
+    table.insert(radioGroup, self.cbPredefinedUnit)
     self.btnPredefinedUnit = Button:New {
         caption = '...',
         right = 40,
         width = 60,
-        height = model.B_HEIGHT,
+        height = SCEN_EDIT.conf.B_HEIGHT,
         parent = stackUnitPanel,
         unitId = nil,
     }
     self.btnPredefinedUnit.OnClick = {
         function()
-            SelectUnit(self.btnPredefinedUnit)
+            SCEN_EDIT.stateManager:SetState(SelectUnitState(self.btnPredefinedUnit))
         end
     }
     self.btnPredefinedUnit.OnSelectUnit = {
@@ -49,16 +47,16 @@ function UnitPanel:Initialize()
     self.btnPredefinedUnitZoom = Button:New {
         caption = "",
         right = 1,
-        width = model.B_HEIGHT,
-        height = model.B_HEIGHT,
+        width = SCEN_EDIT.conf.B_HEIGHT,
+        height = SCEN_EDIT.conf.B_HEIGHT,
         parent = stackUnitPanel,
         padding = {0, 0, 0, 0},
         children = {
             Image:New { 
                 tooltip = "Select unit", 
                 file=SCEN_EDIT_IMG_DIR .. "search.png", 
-                height = model.B_HEIGHT, 
-                width = model.B_HEIGHT,
+                height = SCEN_EDIT.conf.B_HEIGHT, 
+                width = SCEN_EDIT.conf.B_HEIGHT,
                 padding = {0, 0, 0, 0},
                 margin = {0, 0, 0, 0},
             },
@@ -85,11 +83,11 @@ function UnitPanel:Initialize()
         checked = true,
         parent = stackUnitPanel,
     }
-	table.insert(radioGroup, self.cbSpecialUnit)
+    table.insert(radioGroup, self.cbSpecialUnit)
     self.cmbSpecialUnit = ComboBox:New {
         right = 1,
         width = 100,
-        height = model.B_HEIGHT,
+        height = SCEN_EDIT.conf.B_HEIGHT,
         parent = stackUnitPanel,
         items = { "Trigger unit" },
     }
@@ -106,15 +104,15 @@ function UnitPanel:Initialize()
     --VARIABLE
     self.cbVariable, self.cmbVariable = MakeVariableChoice("unit", self.parent)
     if self.cbVariable then
-		table.insert(radioGroup, self.cbVariable)
+        table.insert(radioGroup, self.cbVariable)
     end
-	
-	--EXPRESSION
-	self.cbExpression, self.btnExpression = SCEN_EDIT.AddExpression("unit", self.parent)
-	if self.cbExpression then
-		table.insert(radioGroup, self.cbExpression)
-	end
-	MakeRadioButtonGroup(radioGroup)
+    
+    --EXPRESSION
+    self.cbExpression, self.btnExpression = SCEN_EDIT.AddExpression("unit", self.parent)
+    if self.cbExpression then
+        table.insert(radioGroup, self.cbExpression)
+    end
+    SCEN_EDIT.MakeRadioButtonGroup(radioGroup)
 end
 
 function UnitPanel:UpdateModel(field)

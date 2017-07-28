@@ -1,5 +1,3 @@
-local model = SCEN_EDIT.model
-
 IdentityComparisonPanel = {
 }
 
@@ -12,20 +10,20 @@ function IdentityComparisonPanel:New(obj)
 end
 
 function IdentityComparisonPanel:Initialize()
-	local stackIdentityComparisonPanel = MakeComponentPanel(self.parent)
+    local stackIdentityComparisonPanel = MakeComponentPanel(self.parent)
     self.cmbCmpType = ComboBox:New {
         right = 1,
         width = 100,
-        height = model.B_HEIGHT,
+        height = SCEN_EDIT.conf.B_HEIGHT,
         parent = stackIdentityComparisonPanel,
-        items = SCEN_EDIT.model.identityComparisonTypes,
+        items = SCEN_EDIT.metaModel.identityComparisonTypes,
     }
 end
 
 function IdentityComparisonPanel:UpdateModel(comparison)
-	comparison.cmpTypeId = self.cmbCmpType.selected
+    comparison.cmpTypeId = self.cmbCmpType.selected
 end
 
 function IdentityComparisonPanel:UpdatePanel(comparison)
-	self.cmbCmpType:Select(comparison.cmpTypeId)
+    self.cmbCmpType:Select(comparison.cmpTypeId)
 end
